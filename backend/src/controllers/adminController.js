@@ -275,6 +275,35 @@ async function deleteHealthCenter(req, res, next) {
   }
 }
 
+// ─── GET /admin/dashboard ─────────────────────────────────────────────────────
+async function getDashboardStats(req, res, next) {
+  try {
+    const { rows } = await pool.query(`
+      SELECT
+        COUNT(*)                                          AS total_doctors,
+        COUNT(*) FILTER (WHERE dp.status = 'active')     AS active_doctors,
+        COUNT(*) FILTER (WHERE dp.status = 'suspended')  AS suspended_doctors
+      FROM doctor_profiles dp
+    `);
+
+    const patientRes = await pool.query(`
+      SELECT COUNT(*) AS total_patients
+      FROM user_roles ur
+      JOIN roles r ON r.role_id = ur.role_id
+      WHERE r.role_name = 'patient'
+    `);
+
+    return success(res, {
+      total_doctors:     parseInt(rows[0].total_doctors),
+      active_doctors:    parseInt(rows[0].active_doctors),
+      suspended_doctors: parseInt(rows[0].suspended_doctors),
+      total_patients:    parseInt(patientRes.rows[0].total_patients),
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getAllDoctors,
   createDoctor,
@@ -286,4 +315,5 @@ module.exports = {
   createHealthCenter,
   updateHealthCenter,
   deleteHealthCenter,
+  getDashboardStats
 };

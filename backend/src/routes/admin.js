@@ -20,4 +20,7 @@ router.post('/health-centers',                             ...adminOnly, ctrl.cr
 router.put('/health-centers/:health_center_id',            ...adminOnly, ctrl.updateHealthCenter);
 router.delete('/health-centers/:health_center_id',         ...adminOnly, ctrl.deleteHealthCenter);
 
+// Dashboard
+router.get('/dashboard', ...adminOnly, ctrl.getDashboardStats);
+
 module.exports = router;
