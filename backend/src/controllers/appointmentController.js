@@ -260,6 +260,39 @@ async function rescheduleAppointment(req, res, next) {
   }
 }
 
+// ─── PUT /appointments/:appointment_id/complete ───────────────────────────────
+async function completeAppointment(req, res, next) {
+  try {
+    const { appointment_id } = req.params;
+    const doctorId = req.user.user_id;
+
+    const existing = await fetchAppointment(appointment_id);
+    if (!existing)                          return error(res, 'Appointment not found.', 404);
+    if (existing.doctor_id !== doctorId)    return error(res, 'Not your appointment.', 403);
+    if (existing.status !== 'accepted')     return error(res, 'Only accepted appointments can be marked as completed.', 400);
+
+    await pool.query(
+      `UPDATE appointments SET status = 'completed', updated_at = NOW() WHERE appointment_id = $1`,
+      [appointment_id]
+    );
+
+    const updated = await fetchAppointment(appointment_id);
+
+    // Notify patient — they can now leave a review
+    await notif.notify(
+      existing.patient_id,
+      'appointment_completed',
+      `Your appointment with Dr. ${existing.doctor_name} is complete. Please leave a review!`,
+      'appointment_completed',
+      { appointment: updated }
+    );
+
+    return success(res, { appointment: updated }, 'Appointment marked as completed.');
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   createAppointment,
   getPatientAppointments,
@@ -267,5 +300,6 @@ module.exports = {
   cancelAppointment,
   acceptAppointment,
   declineAppointment,
-  rescheduleAppointment
+  rescheduleAppointment,
+  completeAppointment
 };

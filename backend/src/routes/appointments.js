@@ -9,5 +9,6 @@ router.get('/doctor',                     authenticate, authorise('doctor'),  ct
 router.put('/:appointment_id/cancel',     authenticate, authorise('patient'), ctrl.cancelAppointment);
 router.put('/:appointment_id/accept',     authenticate, authorise('doctor'),  ctrl.acceptAppointment);
 router.put('/:appointment_id/decline',    authenticate, authorise('doctor'),  ctrl.declineAppointment);
+router.put('/:appointment_id/complete',    authenticate, authorise('doctor'),  ctrl.completeAppointment);
 
 module.exports = router;

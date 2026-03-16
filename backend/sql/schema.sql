@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS appointments (
   appointment_time TIME    NOT NULL,
   duration_minutes INTEGER DEFAULT 30,
   reason           TEXT,
-  status           VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending','accepted','declined','cancelled')),
+  status           VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending','accepted','declined','cancelled','completed')),
   created_at       TIMESTAMPTZ DEFAULT NOW(),
   updated_at       TIMESTAMPTZ DEFAULT NOW(),
 
