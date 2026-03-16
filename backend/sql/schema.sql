@@ -176,3 +176,8 @@ CREATE TABLE IF NOT EXISTS ai_recommendations (
 );
 
 CREATE INDEX IF NOT EXISTS idx_ai_recs_patient ON ai_recommendations(patient_id);
+
+ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS is_verified    BOOLEAN     DEFAULT FALSE,
+  ADD COLUMN IF NOT EXISTS otp_code       VARCHAR(6),
+  ADD COLUMN IF NOT EXISTS otp_expires_at TIMESTAMPTZ;

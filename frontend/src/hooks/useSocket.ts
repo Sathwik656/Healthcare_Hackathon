@@ -12,12 +12,15 @@ export const getSocket = (): Socket => {
       reconnectionAttempts: 5,
       reconnectionDelay: 2000,
     });
+
     socketInstance.on("connect", () => {
       console.log("✅ Socket connected:", socketInstance.id);
     });
+
     socketInstance.on("connect_error", (err) => {
       console.error("❌ Socket connect error:", err.message);
     });
+    
     socketInstance.on("disconnect", (reason) => {
       console.warn("⚠️ Socket disconnected:", reason);
     });

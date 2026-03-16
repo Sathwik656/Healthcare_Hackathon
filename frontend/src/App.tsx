@@ -31,6 +31,7 @@ import AdminDashboard from './pages/Admin/Dashboard';
 import ManageDoctors from './pages/Admin/ManageDoctors';
 import ManageHealthCenters from './pages/Admin/ManageHealthCenters';
 import SetAvailability from './pages/Doctor/MyAvailability';
+import VerifyOtp from './pages/Auth/VerifyOtp';
 
 const ProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode, allowedRoles: string[] }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -58,6 +59,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
 
         {/* Protected Routes */}
         <Route element={<Layout />}>

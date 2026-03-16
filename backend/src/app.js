@@ -15,6 +15,7 @@ const aiRoutes = require("./routes/ai");
 const reviewRoutes = require("./routes/reviews");
 const healthCenterRoutes = require("./routes/healthCenters");
 const specialtiesRoutes = require("./routes/specialty");
+const homepageRoutes = require('./routes/homepage');
 
 const app = express();
 
@@ -61,7 +62,9 @@ const authLimiter = rateLimit({
 });
 
 // ── Routes ────────────────────────────────────────────────────────────────────
+
 app.use("/auth", authLimiter, authRoutes);
+app.use('/homepage', homepageRoutes);
 app.use("/doctors", doctorRoutes);
 app.use("/patients", patientRoutes);
 app.use("/appointments", appointmentRoutes);

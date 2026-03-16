@@ -1,51 +1,48 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Activity, Mail, Lock, User, ArrowLeft } from 'lucide-react';
-import api from '@/src/services/api';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Activity, Mail, Lock, User, ArrowLeft } from "lucide-react";
+import api from "@/src/services/api";
 
 const Register = () => {
   const navigate = useNavigate();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     try {
       setLoading(true);
 
-      await api.post('/auth/register', {
+      await api.post("/auth/register", {
         name,
         email,
         password,
       });
 
-      setSuccess('Registration successful! Redirecting to login...');
+      setSuccess("Registration successful! Redirecting to login...");
 
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-
+      navigate("/verify-otp", { state: { email } });
     } catch (err: any) {
       if (err.response) {
-        setError(err.response.data?.message || 'Registration failed');
+        setError(err.response.data?.message || "Registration failed");
       } else {
-        setError('Network error. Please check your connection.');
+        setError("Network error. Please check your connection.");
       }
     } finally {
       setLoading(false);
@@ -54,14 +51,19 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 font-sans">
-
       {/* Header */}
       <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center text-slate-700 hover:text-green-600">
+        <Link
+          to="/"
+          className="flex items-center text-slate-700 hover:text-green-600"
+        >
           <Activity className="h-6 w-6 text-green-600 mr-2" />
           <span className="text-xl font-bold tracking-tight">HealthCare</span>
         </Link>
-        <Link to="/" className="flex items-center text-sm font-medium text-slate-600 hover:text-green-600">
+        <Link
+          to="/"
+          className="flex items-center text-sm font-medium text-slate-600 hover:text-green-600"
+        >
           <ArrowLeft className="w-4 h-4 mr-1" />
           Back to Home
         </Link>
@@ -70,7 +72,6 @@ const Register = () => {
       {/* Main */}
       <main className="flex-1 flex items-center justify-center py-12 px-4">
         <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-slate-100">
-
           <div className="flex flex-col items-center">
             <div className="h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
               <Activity className="h-8 w-8 text-green-600" />
@@ -81,8 +82,11 @@ const Register = () => {
             </h2>
 
             <p className="mt-2 text-sm text-slate-600">
-              Already have an account?{' '}
-              <Link to="/login" className="font-medium text-green-600 hover:text-green-500">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="font-medium text-green-600 hover:text-green-500"
+              >
                 Sign in
               </Link>
             </p>
@@ -101,7 +105,6 @@ const Register = () => {
           )}
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-
             {/* Name */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -179,11 +182,9 @@ const Register = () => {
               disabled={loading}
               className="w-full py-3 px-4 rounded-lg text-white bg-green-600 hover:bg-green-700 disabled:opacity-50"
             >
-              {loading ? 'Registering...' : 'Register'}
+              {loading ? "Registering..." : "Register"}
             </button>
-
           </form>
-
         </div>
       </main>
 
@@ -191,7 +192,6 @@ const Register = () => {
       <footer className="bg-white border-t border-slate-200 py-6 text-center text-sm text-slate-500">
         © {new Date().getFullYear()} HealthCare Platform
       </footer>
-
     </div>
   );
 };
